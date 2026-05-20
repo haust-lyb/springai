@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Update_01_InitDefaultUser implements UpdateRunner {
+public class Update_01_DefaultUser implements UpdateRunner {
 
     private final UserRepository userRepository;
 

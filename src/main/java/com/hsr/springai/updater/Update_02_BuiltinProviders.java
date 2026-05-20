@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Update_02_InitBuiltinProviders implements UpdateRunner {
+public class Update_02_BuiltinProviders implements UpdateRunner {
 
     private final ProviderRepository providerRepository;
 

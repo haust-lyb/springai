@@ -10,4 +10,7 @@ import java.util.List;
 public interface AssistantRepository extends JpaRepository<Assistant, Long> {
 
     List<Assistant> findByUserId(Long userId);
+
+
+    List<Assistant> findByIsBuiltin(Boolean isBuiltin);
 }

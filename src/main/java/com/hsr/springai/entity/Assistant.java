@@ -41,4 +41,7 @@ public class Assistant extends BaseEntity {
     @OneToMany(mappedBy = "assistant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("createTime ASC")
     private List<Topic> topics = new ArrayList<>();
+
+    @Column(name = "is_builtin")
+    private Boolean isBuiltin = false;
 }

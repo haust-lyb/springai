@@ -24,4 +24,7 @@ public class Topic extends BaseEntity {
 
     @Column(name = "model_id")
     private Long modelId;
+
+    @Column(name = "is_builtin")
+    private Boolean isBuiltin = false;
 }
