@@ -1,4 +1,5 @@
 <script setup>
+import { ElementPlus } from '@element-plus/icons-vue'
 
 const props = defineProps({id:{type: [String,Number],required: true},isSelected: Boolean, name: String, desc: String})
 const emit = defineEmits(['click'])
@@ -18,7 +19,7 @@ const handleClick = () => {
     </div>
     <div class="info">
       <div class="name" :class="{ 'isSelected': props.isSelected }">{{ name }}</div>
-      <div class="desc">{{ desc }}</div>
+      <div class="desc">{{ desc || '无详细说明' }}</div>
     </div>
   </div>
 </template>
@@ -34,6 +35,7 @@ const handleClick = () => {
   gap: 10px;
   justify-content: flex-start;
   align-items: center;
+  cursor: pointer;
 
   .icon {
     background: #1f6bff;
@@ -61,6 +63,9 @@ const handleClick = () => {
     .desc {
       color: gray;
       font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

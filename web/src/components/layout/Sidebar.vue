@@ -195,6 +195,8 @@ const handleLogout = () => {
   border-top: 1px solid #f0f0f0;
   flex-shrink: 0;
   white-space: nowrap;
+  display: flex;
+  justify-content: center;
 }
 
 .user-info {

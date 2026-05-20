@@ -1,29 +1,43 @@
 <script setup>
-
 import AssistItem from "@/views/Chat/components/AssistItem.vue";
-import {ref} from "vue";
-import {Search,Plus} from "@element-plus/icons-vue";
+import { onMounted, ref, computed } from "vue";
+import { Search, Plus } from "@element-plus/icons-vue";
+import chatapi from "@/api/chat.js"
+import ChatAssistHeader from "@/views/Chat/components/ChatAssistHeader.vue";
+import TopicList from "@/views/Chat/components/TopicList.vue";
+import AssistConfig from "@/views/Chat/components/AssistConfig.vue";
 
 const assist_items = ref([]);
-assist_items.value.push({
-  id: 1,
-  name: "通用助手",
-  desc: "通过对话助手，答疑解惑",
-  isSelected: true
-})
-assist_items.value.push({
-  id: 2,
-  name: "编程助手",
-  desc: "编程相关问题解答，代码优化"
-})
-assist_items.value.push({
-  id: 3,
-  name: "写作助手",
-  desc: "文章创作、润色、写作建议"
-})
+const searchKeyword = ref('');
+
+const filteredAssistants = computed(() => {
+  if (!searchKeyword.value) {
+    return assist_items.value;
+  }
+  const keyword = searchKeyword.value.toLowerCase();
+  return assist_items.value.filter(item =>
+    item.name.toLowerCase().includes(keyword) ||
+    (item.desc && item.desc.toLowerCase().includes(keyword))
+  );
+});
+
+const loadAssistants = async () => {
+  try {
+    const res = await chatapi.getAssistants();
+    if (res.code === 200 && res.data?.assistants) {
+      assist_items.value = res.data.assistants.map((item, index) => ({
+        id: item.id,
+        name: item.name,
+        desc: item.desc || '',
+        isSelected: index === 0
+      }));
+    }
+  } catch (error) {
+    console.error('加载助手列表失败:', error);
+  }
+};
 
 const assistClick = (id) => {
-  console.log(id)
   assist_items.value.forEach((item) => {
     if (item.id === id) {
       item.isSelected = true
@@ -32,6 +46,10 @@ const assistClick = (id) => {
     }
   })
 }
+
+onMounted(() => {
+  loadAssistants();
+});
 </script>
 
 <template>
@@ -44,15 +62,23 @@ const assistClick = (id) => {
 
       <div class="search">
         <el-input
-            style=""
-            size="mini"
-            placeholder="搜索助手"
-            :prefix-icon="Search"
+          v-model="searchKeyword"
+          size="mini"
+          placeholder="搜索助手"
+          :prefix-icon="Search"
         />
       </div>
 
       <div class="assists">
-        <AssistItem @click="assistClick" v-for="item in assist_items" :key="item.id" :id="item.id" :name="item.name" :isSelected="item.isSelected" :desc="item.desc"></AssistItem>
+        <AssistItem
+          v-for="item in filteredAssistants"
+          :key="item.id"
+          :id="item.id"
+          :name="item.name"
+          :isSelected="item.isSelected"
+          :desc="item.desc"
+          @click="assistClick"
+        />
       </div>
 
       <div class="add-assist">
@@ -64,17 +90,21 @@ const assistClick = (id) => {
     </div>
 
     <div class="topics-container">
-      头部标题和相关操作
+      <div style="width: 100%;flex: 0 0 auto;">
+        <ChatAssistHeader title="通用助手" desc="通用对话助手，答疑解惑"></ChatAssistHeader>
+      </div>
+      <div style="width: 100%;flex: 1 1 auto;">
+        <TopicList></TopicList>
+      </div>
     </div>
 
     <div class="assist-config-container">
-      助手配置区域
+      <AssistConfig></AssistConfig>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .main-container {
   padding: 10px;
   background: white;
@@ -117,13 +147,16 @@ const assistClick = (id) => {
   height: 100vh;
   border-left: 1px solid rgba(191, 188, 188, 0.77);
   flex: 3 1 auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .assist-config-container{
   height: 100vh;
   border-left: 1px solid rgba(191, 188, 188, 0.77);
-  flex: 0 0 240px;
+  flex: 0 0 300px;
 }
-
-
 </style>

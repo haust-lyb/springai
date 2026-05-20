@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { User, Lock, View, Hide } from '@element-plus/icons-vue'
 import SpringAiIcon from '@/assets/spring-ai.svg'
+import authApi from '@/api/auth.js'
+import {ElMessage} from "element-plus";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -18,12 +20,25 @@ const handleLogin = async () => {
     return
   }
   loading.value = true
-  setTimeout(() => {
-    userStore.setToken('mock-token-123456')
-    userStore.setUserInfo({ id: 1, username: username.value })
-    loading.value = false
-    router.push('/chat')
-  }, 500)
+  authApi.login({ username: username.value, password: password.value }).then((res) => {
+    console.log(res)
+    if (res.code === 200){
+      userStore.setToken(res.data.token)
+      userStore.setUserInfo({ id: res.data.userId, username: username.value })
+      loading.value = false
+      router.push('/chat')
+    }
+    if (res.code !== 200) {
+      ElMessage.error(res.message)
+      loading.value = false
+    }
+  })
+  // setTimeout(() => {
+  //   userStore.setToken('mock-token-123456')
+  //   userStore.setUserInfo({ id: 1, username: username.value })
+  //   loading.value = false
+  //   router.push('/chat')
+  // }, 500)
 }
 </script>
 
