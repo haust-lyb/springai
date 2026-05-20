@@ -21,6 +21,7 @@ import Sidebar from './Sidebar.vue'
 
 .main-content {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
 }
 </style>

@@ -1,78 +1,121 @@
 <script setup>
-import { ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue'
 
-const chatHistory = ref([]);
+const props = defineProps({
+  messages: {
+    type: Array,
+    default: () => []
+  }
+})
 
-chatHistory.value.push({ role: 'user', content: '你好' });
-chatHistory.value.push({ role: 'assistant', content: '你好，有什么我可以帮忙的吗？' });
-chatHistory.value.push({ role: 'user', content: '我需要帮助' });
-chatHistory.value.push({ role: 'assistant', content: '当然可以，你需要帮助什么？' })
-chatHistory.value.push({ role: 'user', content: '帮我写一篇歌颂祖国的作文' })
-chatHistory.value.push({ role: 'assistant', content: '好的，大兄弟，我帮你写一篇结构完整、情感真挚的赞美祖国的作文，内容可以体现爱国情怀、历史底蕴以及现代发展成就。下面是范文：\n' +
-      '\n' +
-      '---\n' +
-      '\n' +
-      '**题目：我心中的祖国**\n' +
-      '\n' +
-      '每当我仰望蔚蓝的天空，心中总涌起一种深深的自豪感——那是对我伟大祖国的热爱。她有悠久的历史，有灿烂的文化，也有日新月异的现代发展，这一切都让我为身为中华儿女而自豪。\n' +
-      '\n' +
-      '中华民族拥有五千年的文明史。从古老的长城到庄严的故宫，从诗词歌赋到精妙的书画，这些瑰宝不仅展示了祖先的智慧，也让世界见证了中华文化的独特魅力。每一块砖、每一幅画，都承载着先辈们的辛勤与智慧，提醒我们不忘来路。\n' +
-      '\n' +
-      '而今的祖国，更是一片欣欣向荣的热土。高楼林立，科技创新日新月异，航天事业不断突破，人工智能、大数据等领域也逐渐走在世界前列。祖国的发展让每一个中国人都能切身感受到她的力量，也激励我们勇敢追梦，为她添光彩。\n' +
-      '\n' +
-      '祖国不仅是一片土地，更是一种精神的象征。她教会我们坚韧、勤奋和团结，也让我们懂得感恩与责任。无论我们走到哪里，心中那份对祖国的热爱与牵挂，从未改变。\n' +
-      '\n' +
-      '我爱我的祖国，爱她的山川河流，爱她的历史文化，更爱她那日益辉煌的今天与充满希望的未来。愿我们每一个中华儿女都能携手努力，让祖国更加繁荣昌盛，让她的光芒照耀世界每一个角落。\n' +
-      '\n' +
-      '---\n' +
-      '\n' +
-      '如果你愿意，我可以帮你再写一个**更短、更生动、适合中学或大学作文的版本**，语言更口语化，也更有感染力。\n' +
-      '\n' +
-      '你希望我写这个版本吗？\n' })
+const messageAreaRef = ref(null)
 
+const scrollToBottom = async () => {
+  await nextTick()
+  if (!messageAreaRef.value) return
+  messageAreaRef.value.scrollTop = messageAreaRef.value.scrollHeight
+}
 
-
-
+onMounted(scrollToBottom)
+watch(() => props.messages.length, scrollToBottom)
 </script>
 
 <template>
-  <div class="message-area">
+  <div ref="messageAreaRef" class="message-area">
     <div class="message-container">
-      <div class="message" :class="{'is-user-message': message.role === 'user'}" v-for="message in chatHistory">
-        {{ message.content }}
+      <div
+        v-for="(message, index) in messages"
+        :key="`${message.role}-${index}`"
+        class="message-row"
+        :class="{ 'is-user-message': message.role === 'user' }"
+      >
+        <div class="message-avatar">{{ message.role === 'user' ? '你' : 'AI' }}</div>
+        <div class="message">
+          {{ message.content }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.message-area {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px;
+  background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+}
+
+.message-container {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: min(100%, 720px);
+}
+
+.message-row.is-user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+  max-width: min(88%, 560px);
+}
+
+.message-avatar {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: #fff;
+  background: #1677ff;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.is-user-message .message-avatar {
+  color: #1677ff;
+  background: #dcecff;
+}
+
+.message {
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid #dfe7f2;
+  border-radius: 10px;
+  color: #24324a;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(35, 74, 122, 0.05);
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.is-user-message .message {
+  color: #101828;
+  border-color: #bfdbff;
+  background: linear-gradient(135deg, #eaf4ff 0%, #dbeaff 100%);
+}
+
+@media (max-width: 720px) {
   .message-area {
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    flex: 1 1 auto;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-
-    border: 1px solid #ccc;
-
-    .message-container{
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-
-      .message{
-        background: bisque;
-        padding: 10px;
-        margin-bottom: 10px;
-      }
-      .message.is-user-message{
-        align-self: flex-end; /* 单独靠右 */
-        background: rgba(189, 189, 193, 0.37);
-      }
-    }
-
+    padding: 14px;
   }
+
+  .message-row,
+  .message-row.is-user-message {
+    max-width: 100%;
+  }
+}
 </style>
