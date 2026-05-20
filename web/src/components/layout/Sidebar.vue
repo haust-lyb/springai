@@ -44,7 +44,7 @@ const handleLogout = () => {
 <template>
   <div :class="['sidebar', { collapsed: collapsed }]">
     <div class="sidebar-header">
-      <img class="logo-icon" :src="SpringAi" />
+      <img class="logo-icon" :src="SpringAi" alt="logo" />
       <span v-if="!collapsed" class="logo-title">Spirng AI </span>
     </div>
 
@@ -103,10 +103,6 @@ const handleLogout = () => {
   overflow: hidden;
 }
 
-.sidebar.collapsed {
-  width: 64px;
-}
-
 .sidebar-header {
   padding: 20px 16px;
   display: flex;
@@ -133,19 +129,6 @@ const handleLogout = () => {
 
 .collapsed .logo-title {
   opacity: 0;
-}
-
-.new-btn {
-  margin: 0 16px 16px;
-  width: calc(100% - 32px);
-  height: 40px;
-  flex-shrink: 0;
-  transition: opacity 0.15s ease;
-}
-
-.collapsed .new-btn {
-  opacity: 0;
-  pointer-events: none;
 }
 
 .menu-list {

@@ -63,7 +63,7 @@ onMounted(() => {
       <div class="search">
         <el-input
           v-model="searchKeyword"
-          size="mini"
+          size="small"
           placeholder="搜索助手"
           :prefix-icon="Search"
         />

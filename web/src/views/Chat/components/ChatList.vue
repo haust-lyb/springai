@@ -38,7 +38,7 @@ chatHistory.value.push({ role: 'assistant', content: '好的，大兄弟，我�
 <template>
   <div class="message-area">
     <div class="message-container">
-      <div class="message" :class="{'is-user-message': message.role === 'user'}" :type="message.role" v-for="message in chatHistory">
+      <div class="message" :class="{'is-user-message': message.role === 'user'}" v-for="message in chatHistory">
         {{ message.content }}
       </div>
     </div>

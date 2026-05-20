@@ -9,7 +9,7 @@ const userPrompt = ref("")
   <!--    输入区域-->
   <div class="input-area">
     <div class="input-container">
-      <el-input :autosize="{ minRows: 2, maxRows: 10 }" style="border: 0px;" placeholder="有问题，尽管问" type="textarea" v-model="userPrompt"></el-input>
+      <el-input :autosize="{ minRows: 2, maxRows: 10 }" style="border: 0;" placeholder="有问题，尽管问" type="textarea" v-model="userPrompt"></el-input>
     </div>
     <div class="button-container">
       <!--        按钮区域-->

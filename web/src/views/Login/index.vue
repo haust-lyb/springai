@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { User, Lock, View, Hide } from '@element-plus/icons-vue'
+import { User, Lock } from '@element-plus/icons-vue'
 import SpringAiIcon from '@/assets/spring-ai.svg'
 import authApi from '@/api/auth.js'
 import {ElMessage} from "element-plus";

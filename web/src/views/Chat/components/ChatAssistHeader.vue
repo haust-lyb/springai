@@ -36,7 +36,7 @@ import {Edit, More, Share, Star} from "@element-plus/icons-vue";
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      padding: 10px 0px;
+      padding: 10px 0;
       font-size: 20px;
       font-weight: bold;
     }
