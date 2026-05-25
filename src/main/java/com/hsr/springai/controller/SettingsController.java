@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * 管理员使用，包含查询和设置功能
  */
 @RestController
-@RequestMapping("/api/settings")
 @RequiredArgsConstructor
 public class SettingsController {
 
@@ -25,7 +24,7 @@ public class SettingsController {
     private final SystemSettingRepository systemSettingRepository;
     private final UserService userService;
 
-    @GetMapping("/default-model")
+    @GetMapping("/api/settings/default-model")
     public Result<Map<String, Object>> getDefaultModel() {
         checkAdmin();
         Optional<SystemSetting> setting = systemSettingRepository.findByConfigKey("default_model_id");
@@ -34,7 +33,7 @@ public class SettingsController {
         return Result.success(result);
     }
 
-    @PostMapping("/default-model")
+    @PostMapping("/api/settings/default-model")
     public Result<Void> setDefaultModel(@RequestBody Map<String, Object> body) {
         checkAdmin();
         String modelId = body.get("defaultModelId") != null ? body.get("defaultModelId").toString() : null;
@@ -46,7 +45,7 @@ public class SettingsController {
         return Result.success();
     }
 
-    @GetMapping("/models")
+    @GetMapping("/api/settings/models")
     public Result<List<Map<String, Object>>> listModels() {
         checkAdmin();
         List<Model> models = modelService.findAllEnabledModels();

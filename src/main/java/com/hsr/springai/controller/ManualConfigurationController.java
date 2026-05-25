@@ -46,7 +46,7 @@ import java.util.Map;
 public class ManualConfigurationController {
 
 
-    @GetMapping("/ai-openai")
+    @GetMapping("/api/manual/ai-openai")
     public String getAi(String userInput) {
         log.info("Received user input: {}", userInput);
         var openAiApi = OpenAiApi.builder()
@@ -74,7 +74,7 @@ public class ManualConfigurationController {
 //                new Prompt("Generate the names of 5 famous pirates."));
     }
 
-    @GetMapping("/ai-ollama-list-models")
+    @GetMapping("/api/manual/ai-ollama-list-models")
     public String getAiOllamaListModels() {
         var api = OllamaApi.builder()
                 .baseUrl("http://10.15.15.16:11434")
@@ -85,7 +85,7 @@ public class ManualConfigurationController {
     }
 
 
-    @GetMapping("/ai-ollama")
+    @GetMapping("/api/manual/ai-ollama")
     public String getAiOllama(String userInput) {
         log.info("Received user input: {}", userInput);
         var api = OllamaApi.builder()
@@ -112,7 +112,7 @@ public class ManualConfigurationController {
     }
 
 
-    @GetMapping("/ai-anthropic")
+    @GetMapping("/api/manual/ai-anthropic")
     public String getAiAnthropic(String userInput) {
         log.info("Received user input: {}", userInput);
         var api = AnthropicApi.builder()
@@ -141,7 +141,7 @@ public class ManualConfigurationController {
     }
 
 
-    @GetMapping("/ai-openai-multimodality")
+    @GetMapping("/api/manual/ai-openai-multimodality")
     public String getAiOpenAiMultimodality() {
 
         var imageResource = new ClassPathResource("/static/multimodal.test.png");
@@ -197,7 +197,7 @@ public class ManualConfigurationController {
                 .build();
     }
 
-    @GetMapping("/ai-openai-memory")
+    @GetMapping("/api/manual/ai-openai-memory")
     public String getAiOpenAiMemory(String userInput, String conversationId) {
         log.info("Received user input: {}, conversationId: {}", userInput, conversationId);
 
@@ -233,7 +233,7 @@ public class ManualConfigurationController {
     }
 
 
-    @GetMapping("/ai-openai-memory-tool")
+    @GetMapping("/api/manual/ai-openai-memory-tool")
     public String getAiOpenAiMemoryTool(String userInput, String conversationId) {
         log.info("Received user input: {}, conversationId: {}", userInput, conversationId);
 
@@ -273,7 +273,7 @@ public class ManualConfigurationController {
     }
 
 
-    @GetMapping("/ai-openai-sysprompt")
+    @GetMapping("/api/manual/ai-openai-sysprompt")
     public String getAiOpenAiSysprompt(String userInput, String conversationId) {
         log.info("Received user input: {}, conversationId: {}", userInput, conversationId);
         if (chatMemory.get(conversationId).isEmpty()) {
@@ -304,7 +304,7 @@ public class ManualConfigurationController {
     }
 
 
-    @GetMapping(value = "/ai-openai-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/api/manual/ai-openai-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> getAiOpenAiStream(String userInput, String conversationId) {
         log.info("Received user input: {}, conversationId: {}", userInput, conversationId);
         if (chatMemory.get(conversationId).isEmpty()) {
@@ -347,7 +347,7 @@ public class ManualConfigurationController {
     }
 
 
-    @GetMapping("/ai-openai-memory-tool-jpamemory")
+    @GetMapping("/api/manual/ai-openai-memory-tool-jpamemory")
     public String getAiOpenAiMemoryToolJpaMemory(String userInput, String conversationId) {
         log.info("Received user input: {}, conversationId: {}", userInput, conversationId);
 

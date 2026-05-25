@@ -7,7 +7,6 @@ import com.hsr.springai.repository.SystemSettingRepository;
 import com.hsr.springai.service.ModelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
  * 普通用户使用，只提供查询功能
  */
 @RestController
-@RequestMapping("/api/models")
 @RequiredArgsConstructor
 public class ModelController {
 
@@ -31,7 +29,7 @@ public class ModelController {
     /**
      * 获取所有启用的模型列表（首页使用）
      */
-    @GetMapping
+    @GetMapping("/api/models")
     public Result<List<Map<String, Object>>> listModels() {
         List<Model> models = modelService.findAllEnabledModels();
         List<Map<String, Object>> result = models.stream().map(m -> {
@@ -48,7 +46,7 @@ public class ModelController {
     /**
      * 获取系统默认模型（首页使用）
      */
-    @GetMapping("/default")
+    @GetMapping("/api/models/default")
     public Result<Map<String, Object>> getDefaultModel() {
         Optional<SystemSetting> setting = systemSettingRepository.findByConfigKey("default_model_id");
         Map<String, Object> result = new HashMap<>();

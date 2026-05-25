@@ -35,4 +35,10 @@ public class User extends BaseEntity {
      */
     @Column(length = 20)
     private String status = "enabled";
+
+    /**
+     * 是否内建用户。内建用户用于系统初始化，不能删除。
+     */
+    @Column(name = "is_builtin")
+    private Boolean isBuiltin = false;
 }

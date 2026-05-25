@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/providers")
 @RequiredArgsConstructor
 public class ProviderController {
 
@@ -21,13 +20,13 @@ public class ProviderController {
     private final ModelService modelService;
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/api/providers")
     public Result<List<Provider>> list() {
         checkAdmin();
         return Result.success(providerService.findAll());
     }
 
-    @PostMapping
+    @PostMapping("/api/providers")
     public Result<Provider> create(@RequestBody Map<String, Object> body) {
         checkAdmin();
         String name = (String) body.get("name");
@@ -41,8 +40,8 @@ public class ProviderController {
         return Result.success(provider);
     }
 
-    @PostMapping("/{id}/update")
-    public Result<Provider> update(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+    @PostMapping("/api/providers/update")
+    public Result<Provider> update(@RequestParam Long id, @RequestBody Map<String, Object> body) {
         checkAdmin();
         String name = body.get("name") != null ? (String) body.get("name") : null;
         String type = body.get("type") != null ? (String) body.get("type") : null;
@@ -57,22 +56,22 @@ public class ProviderController {
         return Result.success(provider);
     }
 
-    @PostMapping("/{id}/delete")
-    public Result<Void> delete(@PathVariable Long id) {
+    @PostMapping("/api/providers/delete")
+    public Result<Void> delete(@RequestParam Long id) {
         checkAdmin();
         providerService.delete(id);
         return Result.success();
     }
 
-    @PostMapping("/{id}/fetch-models")
-    public Result<List<Map<String, String>>> fetchModels(@PathVariable Long id) {
+    @PostMapping("/api/providers/fetch-models")
+    public Result<List<Map<String, String>>> fetchModels(@RequestParam Long id) {
         checkAdmin();
         List<Map<String, String>> models = providerService.fetchOllamaModels(id);
         return Result.success(models);
     }
 
-    @GetMapping("/{id}/models")
-    public Result<List<Model>> listProviderModels(@PathVariable Long id) {
+    @GetMapping("/api/providers/models")
+    public Result<List<Model>> listProviderModels(@RequestParam Long id) {
         checkAdmin();
         return Result.success(modelService.findByProviderId(id));
     }

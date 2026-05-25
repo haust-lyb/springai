@@ -10,13 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/topics")
 @RequiredArgsConstructor
 public class TopicController {
 
     private final TopicService topicService;
 
-    @PostMapping
+    @PostMapping("/api/topics")
     public Result<Map<String, Object>> create(@RequestBody Map<String, Object> body) {
         Long assistantId = Long.valueOf(body.get("assistantId").toString());
         String name = (String) body.get("name");
@@ -32,8 +31,8 @@ public class TopicController {
         return Result.success(map);
     }
 
-    @PostMapping("/{id}/update")
-    public Result<Map<String, Object>> updateName(@PathVariable Long id, @RequestBody Map<String, String> body) {
+    @PostMapping("/api/topics/update")
+    public Result<Map<String, Object>> updateName(@RequestParam Long id, @RequestBody Map<String, String> body) {
         String name = body.get("name");
         Topic topic = topicService.updateName(id, name);
         Map<String, Object> map = new HashMap<>();
@@ -45,8 +44,8 @@ public class TopicController {
         return Result.success(map);
     }
 
-    @PostMapping("/{id}/model")
-    public Result<Map<String, Object>> updateModel(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+    @PostMapping("/api/topics/model")
+    public Result<Map<String, Object>> updateModel(@RequestParam Long id, @RequestBody Map<String, Object> body) {
         Long modelId = body.get("modelId") != null ? Long.valueOf(body.get("modelId").toString()) : null;
         Topic topic = topicService.updateModelId(id, modelId);
         Map<String, Object> map = new HashMap<>();
@@ -58,8 +57,8 @@ public class TopicController {
         return Result.success(map);
     }
 
-    @PostMapping("/{id}/delete")
-    public Result<Void> delete(@PathVariable Long id) {
+    @PostMapping("/api/topics/delete")
+    public Result<Void> delete(@RequestParam Long id) {
         topicService.delete(id);
         return Result.success();
     }

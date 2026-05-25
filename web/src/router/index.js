@@ -22,6 +22,11 @@ const routes = [
         component: () => import('@/views/ModelManage/index.vue')
       },
       {
+        path: 'users',
+        name: 'UserManagement',
+        component: () => import('@/views/UserManagement/index.vue')
+      },
+      {
         path: 'settings',
         name: 'Settings',
         component: () => import('@/views/Settings/index.vue')

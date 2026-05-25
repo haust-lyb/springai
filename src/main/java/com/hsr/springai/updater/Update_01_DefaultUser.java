@@ -18,15 +18,21 @@ public class Update_01_DefaultUser implements UpdateRunner {
     @Override
     @Transactional
     public void run() {
-        if (userRepository.count() == 0) {
-            User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(BCrypt.hashpw("admin"));
-            admin.setNickname("管理员");
-            admin.setRole("admin");
-            admin.setStatus("enabled");
-            userRepository.save(admin);
+        User admin = userRepository.findByUsername("admin").orElse(null);
+        if (admin == null && userRepository.count() == 0) {
+            User defaultAdmin = new User();
+            defaultAdmin.setUsername("admin");
+            defaultAdmin.setPassword(BCrypt.hashpw("admin"));
+            defaultAdmin.setNickname("管理员");
+            defaultAdmin.setRole("admin");
+            defaultAdmin.setStatus("enabled");
+            defaultAdmin.setIsBuiltin(true);
+            userRepository.save(defaultAdmin);
             log.info("默认管理员用户初始化完成");
+        } else if (admin != null && !Boolean.TRUE.equals(admin.getIsBuiltin())) {
+            admin.setIsBuiltin(true);
+            userRepository.save(admin);
+            log.info("默认管理员用户已标记为内建用户");
         } else {
             log.info("用户已存在，跳过默认用户初始化");
         }

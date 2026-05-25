@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 import SpringAi from '@/assets/spring-ai.svg'
 import {
   ChatDotSquare,
@@ -15,13 +16,22 @@ import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
+const userStore = useUserStore()
 const collapsed = ref(false)
 
-const menuItems = [
+const baseMenuItems = [
   { label: '助手管理', path: '/chat', icon: ChatDotSquare, desc: '会话与助手' },
   { label: '模型管理', path: '/model', icon: Box, desc: '平台与模型' },
+  { label: '用户管理', path: '/users', icon: User, desc: '账号与角色', adminOnly: true },
   { label: '系统设置', path: '/settings', icon: Setting, desc: '全局配置' }
 ]
+
+const isAdmin = computed(() => {
+  const info = userStore.userInfo || {}
+  return info.role === 'admin' || info.username === 'admin'
+})
+
+const menuItems = computed(() => baseMenuItems.filter(item => !item.adminOnly || isAdmin.value))
 
 const toggleCollapse = () => {
   collapsed.value = !collapsed.value
@@ -32,10 +42,12 @@ const navigateTo = (path) => {
 }
 
 const collapseIcon = computed(() => collapsed.value ? ArrowRight : ArrowLeft)
+const currentUser = computed(() => userStore.userInfo || {})
+const displayName = computed(() => currentUser.value.nickname || currentUser.value.username || '用户')
+const roleLabel = computed(() => currentUser.value.role === 'admin' ? '管理员' : '普通用户')
 
 const handleLogout = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('userInfo')
+  userStore.logout()
   ElMessage.success('已退出登录')
   router.push('/login')
 }
@@ -81,8 +93,8 @@ const handleLogout = () => {
             <el-icon><User /></el-icon>
           </el-avatar>
           <div v-if="!collapsed" class="user-detail">
-            <div class="username">admin</div>
-            <el-tag size="small" type="primary" effect="light" round>专业版</el-tag>
+            <div class="username">{{ displayName }}</div>
+            <el-tag size="small" :type="isAdmin ? 'primary' : 'info'" effect="light" round>{{ roleLabel }}</el-tag>
           </div>
           <span v-if="!collapsed" class="user-arrow">⌄</span>
         </div>

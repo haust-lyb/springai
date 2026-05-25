@@ -11,24 +11,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping("/api/auth/login")
     public Result<Map<String, Object>> login(@RequestBody LoginRequest request) {
         return Result.success(userService.login(request));
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/api/auth/logout")
     public Result<Void> logout() {
         userService.logout();
         return Result.success();
     }
 
-    @GetMapping("/userinfo")
+    @GetMapping("/api/auth/userinfo")
     public Result<Map<String, Object>> getUserInfo() {
         User user = userService.getCurrentUser();
         Map<String, Object> result = new HashMap<>();

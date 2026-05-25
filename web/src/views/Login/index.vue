@@ -54,7 +54,12 @@ const handleLogin = async () => {
   authApi.login({ username: username.value, password: password.value }).then((res) => {
     if (res.code === 200) {
       userStore.setToken(res.data.token)
-      userStore.setUserInfo({ id: res.data.userId, username: username.value })
+      userStore.setUserInfo({
+        id: res.data.userId,
+        username: res.data.username,
+        nickname: res.data.nickname,
+        role: res.data.role
+      })
       loading.value = false
       router.push('/chat')
     }

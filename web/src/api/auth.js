@@ -8,6 +8,14 @@ const login = (params) => {
     })
 }
 
+const userInfo = () => {
+    return request({
+        url: "/auth/userinfo",
+        method: "get"
+    })
+}
+
 export default {
     login,
+    userInfo,
 }

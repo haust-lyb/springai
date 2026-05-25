@@ -13,22 +13,21 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/chat")
 @RequiredArgsConstructor
 public class ChatController {
 
     private final ChatService chatService;
 
-    @GetMapping("/topics/{topicId}/history")
-    public Result<List<Map<String, Object>>> getChatHistory(@PathVariable Long topicId) {
+    @GetMapping("/api/chat/topics/history")
+    public Result<List<Map<String, Object>>> getChatHistory(@RequestParam Long topicId) {
         log.info("Getting chat history for topic {}", topicId);
         return Result.success(List.of());
     }
 
 
-    @PostMapping(value = "/topics/{topicId}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PostMapping(value = "/api/chat/topics/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamChat(
-            @PathVariable Long topicId,
+            @RequestParam Long topicId,
             @RequestBody Map<String, Object> body
     ) {
         String content = (String) body.get("content");

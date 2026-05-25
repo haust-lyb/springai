@@ -14,14 +14,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/assistants")
 @RequiredArgsConstructor
 public class AssistantController {
 
     private final AssistantService assistantService;
     private final TopicService topicService;
 
-    @GetMapping
+    @GetMapping("/api/assistants")
     public Result<Map<String, Object>> list() {
         List<Assistant> assistants = assistantService.findAll();
         List<Topic> allTopics = assistants.stream()
@@ -58,7 +57,7 @@ public class AssistantController {
         return Result.success(data);
     }
 
-    @PostMapping
+    @PostMapping("/api/assistants")
     public Result<Map<String, Object>> create(@RequestBody Map<String, Object> body) {
         String name = body.getOrDefault("name", "默认助手").toString();
         String desc = body.getOrDefault("desc", "").toString();
@@ -74,8 +73,8 @@ public class AssistantController {
         return Result.success(map);
     }
 
-    @PostMapping("/{id}/update")
-    public Result<Map<String, Object>> update(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+    @PostMapping("/api/assistants/update")
+    public Result<Map<String, Object>> update(@RequestParam Long id, @RequestBody Map<String, Object> body) {
         String name = (String) body.get("name");
         String desc = (String) body.get("desc");
         Long modelId = body.get("modelId") != null ? Long.valueOf(body.get("modelId").toString()) : null;
@@ -94,14 +93,14 @@ public class AssistantController {
         return Result.success(map);
     }
 
-    @PostMapping("/{id}/delete")
-    public Result<Void> delete(@PathVariable Long id) {
+    @PostMapping("/api/assistants/delete")
+    public Result<Void> delete(@RequestParam Long id) {
         assistantService.delete(id);
         return Result.success();
     }
 
-    @PostMapping("/{id}/copy")
-    public Result<Map<String, Object>> copy(@PathVariable Long id) {
+    @PostMapping("/api/assistants/copy")
+    public Result<Map<String, Object>> copy(@RequestParam Long id) {
         Assistant assistant = assistantService.copy(id);
         Map<String, Object> map = new HashMap<>();
         map.put("id", assistant.getId());
@@ -112,8 +111,8 @@ public class AssistantController {
         return Result.success(map);
     }
 
-    @PostMapping("/{id}/topics/clear")
-    public Result<Void> clearTopics(@PathVariable Long id) {
+    @PostMapping("/api/assistants/topics/clear")
+    public Result<Void> clearTopics(@RequestParam Long id) {
         assistantService.clearTopics(id);
         return Result.success();
     }
